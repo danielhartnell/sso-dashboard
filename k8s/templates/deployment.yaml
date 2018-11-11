@@ -41,3 +41,5 @@ spec:
               value: {{ .Values.domain_name }}
             - name: DASHBOARD_GUNICORN_WORKERS
               value: "1"
+            - name: DASHBOARD_CONFIG_INI
+              value: "/etc/sso-dashboard.ini"
