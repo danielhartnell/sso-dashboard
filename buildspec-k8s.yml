@@ -29,7 +29,7 @@ phases:
       - export MASTER=$(if [ "$CODEBUILD_WEBHOOK_TRIGGER" = "branch/master" ]; then echo 1; fi)
       - echo "running for ${COMMIT_SHA} in ${DEPLOY_ENV}"
       - aws eks update-kubeconfig --name $CLUSTER_NAME
-      - echo /root/.kube/config
+      - cat /root/.kube/config
       - aws ecr get-login --region us-west-2 --no-include-email | bash
       - git clone https://github.com/ansible/ansible-container.git
       - pip install -e ./ansible-container[docker]
