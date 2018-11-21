@@ -20,6 +20,8 @@ phases:
       - mv aws-iam-authenticator /usr/local/bin/
       - apt update && apt install -y python3-pip
       - pip3 install awscli
+      - echo "server_name=web.sso-dashboard-dev.infra.iam.mozilla.com" >> ./ansible/roles/dashboard/files/sso-dashboard.ini
+      - echo "cdn=sso.allizom.org" >> ./ansible/roles/dashboard/files/sso-dashboard.ini      
   pre_build:
     commands:
       - export COMMIT_SHA=$CODEBUILD_RESOLVED_SOURCE_VERSION
