@@ -42,6 +42,6 @@ phases:
       - docker push $DOCKER_REGISTRY/$IMAGE_NAME:$COMMIT_SHA
   post_build:
     commands:
-      - helm template -f k8s/values.yaml -f k8s/values/$DEPLOY_ENV.yaml --set docker_registry=$DOCKER_REGISTRY,namespace=sso-dashboard-$DEPLOY_ENV,rev=$COMMIT_SHA k8s/ | kubectl apply -f -
+      - helm template -f k8s/values.yaml -f k8s/values/$DEPLOY_ENV.yaml --set docker_registry=$DOCKER_REGISTRY,namespace=sso-dashboard-$DEPLOY_ENV,rev=$COMMIT_SHA,assume_role=$ASSUME_ROLE_ARN k8s/ | kubectl apply -f -
 
 
