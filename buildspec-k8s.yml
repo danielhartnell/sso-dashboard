@@ -29,7 +29,6 @@ phases:
       - export MASTER=$(if [ "$CODEBUILD_WEBHOOK_TRIGGER" = "branch/master" ]; then echo 1; fi)
       - echo "running for ${COMMIT_SHA} in ${DEPLOY_ENV}"
       - aws eks update-kubeconfig --name $CLUSTER_NAME
-      - cat /root/.kube/config
       - aws ecr get-login --region us-west-2 --no-include-email | bash
       - git clone https://github.com/ansible/ansible-container.git
       - pip install -e ./ansible-container[docker]
@@ -38,6 +37,9 @@ phases:
       - if [ -n "$MASTER" ]; then cd ansible && ansible-container build --with-volumes `echo $CODEBUILD_SRC_DIR`:/dashboard; fi
       - if [ -n "$MASTER" ]; then docker tag ansible-web $DOCKER_REGISTRY/$IMAGE_NAME:$COMMIT_SHA; fi
       - if [ -n "$MASTER" ]; then docker push $DOCKER_REGISTRY/$IMAGE_NAME:$COMMIT_SHA; fi
+      - cd ansible && ansible-container build --with-volumes `echo $CODEBUILD_SRC_DIR`:/dashboard
+      - docker tag ansible-web $DOCKER_REGISTRY/$IMAGE_NAME:$COMMIT_SHA
+      - docker push $DOCKER_REGISTRY/$IMAGE_NAME:$COMMIT_SHA
   post_build:
     commands:
       - helm template -f k8s/values.yaml -f k8s/values/$DEPLOY_ENV.yaml --set docker_registry=$DOCKER_REGISTRY,namespace=sso-dashboard-$DEPLOY_ENV,rev=$COMMIT_SHA k8s/ | kubectl apply -f -
