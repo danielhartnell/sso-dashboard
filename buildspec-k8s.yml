@@ -37,7 +37,7 @@ phases:
       - if [ -n "$MASTER" ]; then cd ansible && ansible-container build --with-volumes `echo $CODEBUILD_SRC_DIR`:/dashboard; fi
       - if [ -n "$MASTER" ]; then docker tag ansible-web $DOCKER_REGISTRY/$IMAGE_NAME:$COMMIT_SHA; fi
       - if [ -n "$MASTER" ]; then docker push $DOCKER_REGISTRY/$IMAGE_NAME:$COMMIT_SHA; fi
-      - cd ansible && ansible-container build --with-volumes `echo $CODEBUILD_SRC_DIR`:/dashboard
+      - cd ansible && ansible-container build --with-volumes `echo $CODEBUILD_SRC_DIR`:/dashboard && cd ..
       - docker tag ansible-web $DOCKER_REGISTRY/$IMAGE_NAME:$COMMIT_SHA
       - docker push $DOCKER_REGISTRY/$IMAGE_NAME:$COMMIT_SHA
   post_build:
