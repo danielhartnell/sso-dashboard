@@ -25,7 +25,7 @@ phases:
     commands:
       - export COMMIT_SHA=$CODEBUILD_RESOLVED_SOURCE_VERSION
       - export DEPLOY_ENV=$(echo $CODEBUILD_WEBHOOK_TRIGGER | sed -e 's/tag\/.*-\(.*\)/\1/' | sed -e 's/branch\/master/dev/')
-      - if [ -n "$DEPLOY_ENV" ]; then export DEPLOY_ENV="dev"; fi
+      - if [ -z "$DEPLOY_ENV" ]; then export DEPLOY_ENV="dev"; fi
       - export MASTER=$(if [ "$CODEBUILD_WEBHOOK_TRIGGER" = "branch/master" ]; then echo 1; fi)
       - echo "running for ${COMMIT_SHA} in ${DEPLOY_ENV}"
       - aws eks update-kubeconfig --name $CLUSTER_NAME
