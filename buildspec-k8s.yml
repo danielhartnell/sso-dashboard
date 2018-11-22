@@ -21,7 +21,8 @@ phases:
       - apt update && apt install -y python3-pip
       - pip3 install awscli
       - echo "server_name=web.sso-dashboard-dev.infra.iam.mozilla.com" >> ./ansible/roles/dashboard/files/sso-dashboard.ini
-      - echo "cdn=sso.allizom.org" >> ./ansible/roles/dashboard/files/sso-dashboard.ini      
+      - echo "cdn=sso.allizom.org" >> ./ansible/roles/dashboard/files/sso-dashboard.ini
+      - sed -i "s/--workers=5/--workers=1/" ./ansible/roles/dashboard/files/nginx/start.sh
   pre_build:
     commands:
       - export COMMIT_SHA=$CODEBUILD_RESOLVED_SOURCE_VERSION
